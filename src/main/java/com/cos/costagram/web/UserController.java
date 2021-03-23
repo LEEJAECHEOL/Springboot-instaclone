@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class UserController {
-	
+
 	@GetMapping("/user/{id}")
 	public String profile(@PathVariable int id) {
 		return "user/profile";
