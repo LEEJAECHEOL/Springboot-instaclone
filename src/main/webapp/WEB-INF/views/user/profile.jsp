@@ -2,6 +2,8 @@
 
 <%@ include file="../layout/header.jsp"%>
 
+<input type="hidden" id="userId" value="${dto.user.id}" /> 
+
 <!--프로필 섹션-->
 <section class="profile">
 	<!--유저정보 컨테이너-->
@@ -133,7 +135,7 @@
 
 		<!--팔로워 리스트-->
 		<div class="follower-list" id="follow_list">
-		
+			
 			
 			
 			
