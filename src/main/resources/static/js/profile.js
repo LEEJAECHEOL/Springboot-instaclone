@@ -30,17 +30,43 @@ function makeSubscribeInfo(u){
 	item += `<div class="follower__btn">`;
 	if(!u.equalState){
 		if(u.followState){
-			item += `<button class="cta blue">구독취소</button>`;	
+			item += `<button class="cta blue" onclick="followOrUnFollow(${u.userId})">구독취소</button>`;	
 		}else{
-			item += `<button class="cta">구독하기</button>`;
+			item += `<button class="cta" onclick="followOrUnFollow(${u.userId})">구독하기</button>`;
 		}	
 	}
-	
 	item += `</div>`;
 	item += `</div>`;
 
 	return item;
 }
+
+function followOrUnFollow(userId){
+	let text = $(`#follow-${userId} button`).text();
+	
+	if(text === "구독취소"){
+		$.ajax({
+			type: "DELETE",
+			url: "/follow/"+userId,
+			dataType: "json"
+		}).done(res=>{
+			$(`#follow-${userId} button`).text("구독하기");
+			$(`#follow-${userId} button`).toggleClass("blue");
+		});
+	}else{
+		$.ajax({
+			type: "POST",
+			url: "/follow/"+userId,
+			dataType: "json"
+		}).done(res=>{
+			$(`#follow-${userId} button`).text("구독취소");
+			$(`#follow-${userId} button`).addClass("blue");
+		});
+	}
+}
+
+
+
 
 //$("#follow-1 button").text("구독하기");
 //$("#follow-1 button").클래스명변경("cta");

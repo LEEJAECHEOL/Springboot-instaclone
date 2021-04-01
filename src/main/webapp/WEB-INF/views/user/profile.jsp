@@ -137,8 +137,6 @@
 		<div class="follower-list" id="follow_list">
 			
 			
-			
-			
 		</div>
 		
 		<!--팔로워 리스트end-->
