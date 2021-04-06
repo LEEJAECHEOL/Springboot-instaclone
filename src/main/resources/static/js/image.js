@@ -1,30 +1,39 @@
 let page = 0;
 
-function feedLoad(){
-	// ajax로 Page<Image> 가져올 예정 (3개)
-	$.ajax({
-		type: "get",
-		url: `/image?page=${page}`,
-		dataType: "json"
-	}).done(res=>{
-		let images = res.data.content;
-		images.forEach((image)=>{
-			let feedBox = feedItem(image);
-			$("#feed_list").append(feedBox);
-		});
-	});
+function feedLoad() {
+  // ajax로 Page<Image> 가져올 예정 (3개)
+  $.ajax({
+    type: "get",
+    url: `/image?page=${page}`,
+    dataType: "json",
+  }).done((res) => {
+    let images = res.data.content;
+    images.forEach((image) => {
+      let feedBox = feedItem(image);
+      $("#feed_list").append(feedBox);
+    });
+  });
 }
 
 feedLoad();
 
-$(window).scroll(()=>{
-	console.log("스크롤 발생함");
-	// page를 ++
-	// feedLoad();
+$(window).scroll(() => {
+  
+//	console.log("scrollTop", $(window).scrollTop());
+//	console.log("document height", $(document).height());
+//	console.log("window height", $(window).height());
+	
+	let checkNum = $(window).scrollTop() - ($(document).height() - $(window).height());
+	
+	// 근사치 계산
+	if(checkNum < 1 && checkNum > -1){
+		page++;
+		feedLoad();
+	}
 });
 
-function feedItem(image){
-	let result = `
+function feedItem(image) {
+  let result = `
 <!--전체 리스트 아이템-->
 <div class="story-list__item">
 	<!--리스트 아이템 헤더영역-->
@@ -42,20 +51,19 @@ function feedItem(image){
 	<!--게시물 내용 + 댓글 영역-->
 	<div class="sl__item__contents">
 		<!-- 하트모양 버튼 박스 -->
-		<div class="sl__item__contents__icon"> ` ;
-	
-	if(image.likeState){
-		result += `<button onclick="likeOrUnLike(${image.id})">
+		<div class="sl__item__contents__icon"> `;
+
+  if (image.likeState) {
+    result += `<button onclick="likeOrUnLike(${image.id})">
 							<i class="fas fa-heart active" id="like_icon_${image.id}"></i>
 						</button>`;
-	}else{
-		result += `<button onclick="likeOrUnLike(${image.id})">
+  } else {
+    result += `<button onclick="likeOrUnLike(${image.id})">
 							<i class="far fa-heart" id="like_icon_${image.id}"></i>
 						</button>`;
-	}
+  }
 
-				
-	result += 	`	
+  result += `	
 		</div>
 		<!-- 하트모양 버튼 박스 end -->
 
@@ -66,13 +74,12 @@ function feedItem(image){
 		<!--태그박스-->
 		<div class="sl__item__contents__tags">
 			<p> `;
-	
-				image.tags.forEach((tag)=>{
-					result += `#${tag.name} `;
-				});
-				
-				
-	result += `			
+
+  image.tags.forEach((tag) => {
+    result += `#${tag.name} `;
+  });
+
+  result += `			
 			</p>
 		</div>
 		<!--태그박스end-->
@@ -101,7 +108,5 @@ function feedItem(image){
 </div>
 <!--전체 리스트 아이템end-->
 `;
-	return result;
+  return result;
 }
-
-
