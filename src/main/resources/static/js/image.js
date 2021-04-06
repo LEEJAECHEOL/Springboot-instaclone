@@ -1,5 +1,8 @@
 let page = 0;
 
+let principalId = $("#principal-id").val();
+let username = $("#principal-username").val();
+
 function feedLoad() {
   // ajax로 Page<Image> 가져올 예정 (3개)
   $.ajax({
@@ -91,17 +94,35 @@ function feedItem(image) {
 		<!--게시글내용end-->
 		
 		<!-- 댓글 들어오는 박스 -->
-		<div>
-			<div class="sl__item__contents__comment">
-				
-			</div>
+		<div id="comment-list-${image.id}">
+		`;
+  
+  		image.comments.forEach((comment)=>{
+  			result += `	<div class="sl__item__contents__comment" id="comment-${comment.id}"">
+			    <p>
+			      <b>${comment.user.username} :</b>
+			      ${comment.content}
+			    </p>
+  				`;
+  			
+  			if(principalId == comment.user.id){
+  	  			result +=`
+  				    <button onClick="deleteComment(${comment.id})"><i class="fas fa-times"></i></button>
+  				`;
+  			}
+  			
+  			result += `
+			  </div>`;
+  		});
+  
+  		result += `
 		</div>
 		<!-- 댓글 들어오는 박스end -->
 
 		<!--댓글입력박스-->
 		<div class="sl__item__input">
-			<input type="text" placeholder="댓글 달기..." />
-			<button type="button" onClick="addComment(1, 'username')">게시</button>
+			<input type="text" placeholder="댓글 달기..." id="comment-${image.id}"/>
+			<button type="button" onClick="addComment(${image.id}, '${username}')">게시</button>
 		</div>
 		<!--댓글달기박스end-->
 	</div>
@@ -110,3 +131,5 @@ function feedItem(image) {
 `;
   return result;
 }
+
+
